@@ -88,8 +88,8 @@ function displayChart() {
       options: {
         scales: {
           y: {
-            suggestedMin: 0,
-            suggestedMax: 10,
+            min: 1,  // Set the minimum value of y-axis to 1
+            max: 10, // Set the maximum value of y-axis to 10
             title: {
               display: true,
               text: 'Rating'
@@ -105,7 +105,6 @@ function displayChart() {
       }
     });
 
-    // Displaying previous notes
     const notesList = document.createElement('ul');
     notesList.classList.add('notes-list');
 
