@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Success Tracker</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <div class="question-container">
+      <p>Was your Day Productive?</p>
+      <div class="buttons-container">
+        <button id="yesBtn" class="response-btn">Yes</button>
+        <button id="noBtn" class="response-btn">No</button>
+      </div>
+      <div class="rating">
+        <p>Rate your Day:</p>
+        <div class="stars" id="stars">
+          <span class="star" data-value="1">&#9733;</span>
+          <span class="star" data-value="2">&#9733;</span>
+          <span class="star" data-value="3">&#9733;</span>
+          <span class="star" data-value="4">&#9733;</span>
+          <span class="star" data-value="5">&#9733;</span>
+          <span class="star" data-value="6">&#9733;</span>
+          <span class="star" data-value="7">&#9733;</span>
+          <span class="star" data-value="8">&#9733;</span>
+          <span class="star" data-value="9">&#9733;</span>
+          <span class="star" data-value="10">&#9733;</span>
+        </div>
+        <input type="hidden" id="satisfactionRating" value="0">
+      </div>
+      <textarea id="noteField" placeholder="Write your note here"></textarea>
+      <button id="submitBtn" class="submit-btn">Submit</button>
+      <button id="chartBtn" class="chart-btn">View Progress Chart</button>
+      <canvas id="progressChart" width="800" height="400"></canvas>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
+
