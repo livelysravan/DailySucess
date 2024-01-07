@@ -65,6 +65,7 @@ function displayChart() {
   if (storedData) {
     const dates = storedData.map(data => data.date);
     const ratings = storedData.map(data => data.rating);
+    const notes = storedData.map(data => data.note);
 
     const ctx = progressChartCanvas.getContext('2d');
     const chart = new Chart(ctx, {
@@ -74,15 +75,21 @@ function displayChart() {
         datasets: [{
           label: 'Productivity Ratings',
           data: ratings,
-          fill: false,
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
           borderColor: 'rgba(75, 192, 192, 1)',
-          tension: 0.4
+          borderWidth: 1,
+          pointBackgroundColor: 'rgba(75, 192, 192, 1)',
+          pointBorderColor: 'rgba(75, 192, 192, 1)',
+          pointRadius: 5,
+          pointHoverRadius: 8,
+          lineTension: 0.4
         }]
       },
       options: {
         scales: {
           y: {
-            beginAtZero: true,
+            suggestedMin: 0,
+            suggestedMax: 10,
             title: {
               display: true,
               text: 'Rating'
@@ -97,5 +104,21 @@ function displayChart() {
         }
       }
     });
+
+    // Displaying previous notes
+    const notesList = document.createElement('ul');
+    notesList.classList.add('notes-list');
+
+    notes.forEach(note => {
+      const listItem = document.createElement('li');
+      listItem.textContent = note;
+      notesList.appendChild(listItem);
+    });
+
+    const chartContainer = document.querySelector('.chart-container');
+    chartContainer.innerHTML = ''; // Clear previous content
+    chartContainer.appendChild(notesList); // Append notes list after clearing
+    chartContainer.appendChild(progressChartCanvas); // Append chart canvas
+    chartContainer.style.display = 'block'; // Show the chart container
   }
 }
