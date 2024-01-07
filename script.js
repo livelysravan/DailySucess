@@ -1,7 +1,7 @@
 const stars = document.querySelectorAll('.star');
 const responseButtons = document.querySelectorAll('.response-btn');
 const submitBtn = document.getElementById('submitBtn');
-const showChartBtn = document.getElementById('showChartBtn');
+const chartBtn = document.getElementById('chartBtn');
 const progressChartCanvas = document.getElementById('progressChart');
 
 let productivityData = [];
@@ -39,7 +39,7 @@ submitBtn.addEventListener('click', () => {
   saveToLocalStorage();
 });
 
-showChartBtn.addEventListener('click', () => {
+chartBtn.addEventListener('click', () => {
   displayChart();
 });
 
