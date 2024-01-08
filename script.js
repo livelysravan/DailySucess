@@ -1,29 +1,21 @@
-const stars = document.querySelectorAll('.star');
-const responseButtons = document.querySelectorAll('.response-btn');
-const submitBtn = document.getElementById('submitBtn');
-const chartBtn = document.getElementById('chartBtn');
-const progressChartCanvas = document.getElementById('progressChart');
+// Function to set the rating stars
+function setRating(rating) {
+  const hiddenInput = document.getElementById('satisfactionRating');
+  hiddenInput.value = rating;
 
-let productivityData = [];
-
-stars.forEach(star => {
-  star.addEventListener('click', () => {
-    const rating = parseInt(star.getAttribute('data-value'));
-    setRating(rating);
+  const stars = document.querySelectorAll('.star');
+  stars.forEach(star => {
+    if (parseInt(star.getAttribute('data-value')) <= rating) {
+      star.classList.add('selected');
+    } else {
+      star.classList.remove('selected');
+    }
   });
-});
+}
 
-responseButtons.forEach(button => {
-  button.addEventListener('click', () => {
-    button.classList.add('clicked');
-    setTimeout(() => {
-      button.classList.remove('clicked');
-    }, 300);
-  });
-});
-
-submitBtn.addEventListener('click', () => {
-  const success = (document.getElementById('yesBtn').checked) ? true : false;
+// Function to save data to local storage
+function saveToLocalStorage() {
+  const success = document.getElementById('yesBtn').checked;
   const rating = parseInt(document.getElementById('satisfactionRating').value);
   const note = document.getElementById('noteField').value;
   const date = new Date().toLocaleDateString();
@@ -35,39 +27,26 @@ submitBtn.addEventListener('click', () => {
     date
   };
 
-  productivityData.push(data);
-  saveToLocalStorage();
-});
-
-chartBtn.addEventListener('click', () => {
-  displayChart();
-});
-
-function setRating(rating) {
-  const hiddenInput = document.getElementById('satisfactionRating');
-  hiddenInput.value = rating;
-
-  stars.forEach(star => {
-    if (parseInt(star.getAttribute('data-value')) <= rating) {
-      star.classList.add('selected');
-    } else {
-      star.classList.remove('selected');
-    }
-  });
+  let storedData = JSON.parse(localStorage.getItem('productivityData')) || [];
+  storedData.push(data);
+  localStorage.setItem('productivityData', JSON.stringify(storedData));
 }
 
-function saveToLocalStorage() {
-  localStorage.setItem('productivityData', JSON.stringify(productivityData));
-}
-
+// Function to display the chart for the past month
 function displayChart() {
   const storedData = JSON.parse(localStorage.getItem('productivityData'));
   if (storedData) {
-    const dates = storedData.map(data => data.date);
-    const ratings = storedData.map(data => data.rating);
-    const notes = storedData.map(data => data.note);
+    const today = new Date().toLocaleDateString();
+    const oneMonthAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toLocaleDateString();
 
-    const ctx = progressChartCanvas.getContext('2d');
+    const filteredData = storedData.filter(data => {
+      return new Date(data.date) >= new Date(oneMonthAgo) && new Date(data.date) <= new Date(today);
+    });
+
+    const dates = filteredData.map(data => data.date);
+    const ratings = filteredData.map(data => data.rating);
+
+    const ctx = document.getElementById('progressChart').getContext('2d');
     const chart = new Chart(ctx, {
       type: 'line',
       data: {
@@ -75,21 +54,15 @@ function displayChart() {
         datasets: [{
           label: 'Productivity Ratings',
           data: ratings,
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          fill: false,
           borderColor: 'rgba(75, 192, 192, 1)',
-          borderWidth: 1,
-          pointBackgroundColor: 'rgba(75, 192, 192, 1)',
-          pointBorderColor: 'rgba(75, 192, 192, 1)',
-          pointRadius: 5,
-          pointHoverRadius: 8,
-          lineTension: 0.4
+          tension: 0.4
         }]
       },
       options: {
         scales: {
           y: {
-            min: 1,  // Set the minimum value of y-axis to 1
-            max: 10, // Set the maximum value of y-axis to 10
+            beginAtZero: true,
             title: {
               display: true,
               text: 'Rating'
@@ -104,20 +77,26 @@ function displayChart() {
         }
       }
     });
-
-    const notesList = document.createElement('ul');
-    notesList.classList.add('notes-list');
-
-    notes.forEach(note => {
-      const listItem = document.createElement('li');
-      listItem.textContent = note;
-      notesList.appendChild(listItem);
-    });
-
-    const chartContainer = document.querySelector('.chart-container');
-    chartContainer.innerHTML = ''; // Clear previous content
-    chartContainer.appendChild(notesList); // Append notes list after clearing
-    chartContainer.appendChild(progressChartCanvas); // Append chart canvas
-    chartContainer.style.display = 'block'; // Show the chart container
   }
 }
+
+// Event listeners for rating stars and buttons
+document.addEventListener('DOMContentLoaded', displayChart);
+
+const stars = document.querySelectorAll('.star');
+stars.forEach(star => {
+  star.addEventListener('click', () => {
+    const rating = parseInt(star.getAttribute('data-value'));
+    setRating(rating);
+  });
+});
+
+const submitBtn = document.getElementById('submitBtn');
+submitBtn.addEventListener('click', () => {
+  saveToLocalStorage();
+});
+
+const showChartBtn = document.getElementById('showChartBtn');
+showChartBtn.addEventListener('click', () => {
+  displayChart();
+});
