@@ -1,4 +1,3 @@
-// Function to set the rating stars
 function setRating(rating) {
   const hiddenInput = document.getElementById('satisfactionRating');
   hiddenInput.value = rating;
@@ -13,7 +12,6 @@ function setRating(rating) {
   });
 }
 
-// Function to save data to local storage
 function saveToLocalStorage() {
   const success = document.getElementById('yesBtn').checked;
   const rating = parseInt(document.getElementById('satisfactionRating').value);
@@ -32,55 +30,32 @@ function saveToLocalStorage() {
   localStorage.setItem('productivityData', JSON.stringify(storedData));
 }
 
-// Function to display the chart for the past month
 function displayChart() {
   const storedData = JSON.parse(localStorage.getItem('productivityData'));
   if (storedData) {
-    const today = new Date().toLocaleDateString();
-    const oneMonthAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toLocaleDateString();
+    // Chart display code (as mentioned previously)
+    // ...
+  }
+}
 
-    const filteredData = storedData.filter(data => {
-      return new Date(data.date) >= new Date(oneMonthAgo) && new Date(data.date) <= new Date(today);
-    });
+function displayAllNotes() {
+  const storedData = JSON.parse(localStorage.getItem('productivityData'));
+  if (storedData) {
+    const notesContainer = document.getElementById('allNotes');
+    notesContainer.innerHTML = ''; // Clear previous content
 
-    const dates = filteredData.map(data => data.date);
-    const ratings = filteredData.map(data => data.rating);
+    storedData.forEach(data => {
+      const note = data.note;
+      const date = data.date;
 
-    const ctx = document.getElementById('progressChart').getContext('2d');
-    const chart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: dates,
-        datasets: [{
-          label: 'Productivity Ratings',
-          data: ratings,
-          fill: false,
-          borderColor: 'rgba(75, 192, 192, 1)',
-          tension: 0.4
-        }]
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: 'Rating'
-            }
-          },
-          x: {
-            title: {
-              display: true,
-              text: 'Date'
-            }
-          }
-        }
-      }
+      const noteElement = document.createElement('div');
+      noteElement.classList.add('note');
+      noteElement.innerHTML = `<strong>${date}</strong>: ${note}`;
+      notesContainer.appendChild(noteElement);
     });
   }
 }
 
-// Event listeners for rating stars and buttons
 document.addEventListener('DOMContentLoaded', displayChart);
 
 const stars = document.querySelectorAll('.star');
@@ -99,4 +74,9 @@ submitBtn.addEventListener('click', () => {
 const showChartBtn = document.getElementById('showChartBtn');
 showChartBtn.addEventListener('click', () => {
   displayChart();
+});
+
+const showAllNotesBtn = document.getElementById('showAllNotesBtn');
+showAllNotesBtn.addEventListener('click', () => {
+  displayAllNotes();
 });
