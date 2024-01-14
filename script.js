@@ -32,9 +32,32 @@ function saveToLocalStorage() {
 
 function displayChart() {
   const storedData = JSON.parse(localStorage.getItem('productivityData'));
-  if (storedData) {
-    // Chart display code (as mentioned previously)
-    // ...
+  if (storedData && storedData.length > 0) {
+    const dates = storedData.map(data => data.date);
+    const ratings = storedData.map(data => data.rating);
+
+    const ctx = document.getElementById('progressChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: dates,
+        datasets: [{
+          label: 'Satisfaction Ratings',
+          data: ratings,
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1,
+          fill: false
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 5
+          }
+        }
+      }
+    });
   }
 }
 
