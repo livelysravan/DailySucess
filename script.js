@@ -32,11 +32,18 @@ function saveToLocalStorage() {
 
 function displayChart() {
   const storedData = JSON.parse(localStorage.getItem('productivityData'));
+
   if (storedData && storedData.length > 0) {
     const dates = storedData.map(data => data.date);
     const ratings = storedData.map(data => data.rating);
 
     const ctx = document.getElementById('progressChart').getContext('2d');
+
+    // Clear the existing chart (if any) to prevent duplication
+    Chart.helpers.each(Chart.instances, instance => {
+      instance.destroy();
+    });
+
     new Chart(ctx, {
       type: 'line',
       data: {
