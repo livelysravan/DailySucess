@@ -8,7 +8,7 @@ function setRating(rating) {
       star.classList.add('selected');
     } else {
       star.classList.remove('selected');
-    }
+ the     }
   });
 }
 
