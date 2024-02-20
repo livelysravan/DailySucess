@@ -2,7 +2,7 @@ function setRating(rating) {
   const hiddenInput = document.getElementById('satisfactionRating');
   hiddenInput.value = rating;
 
-  const stars = document.querySelectorAll('.star');
+  const stars = document.querySelectorAll('.star'):
   stars.forEach(star => {
     if (parseInt(star.getAttribute('data-value')) <= rating) {
       star.classList.add('selected');
