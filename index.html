@@ -1,1 +1,41 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Daily Success Tracker</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <div class="question-container">
+      <p>How successful/productive was your day?</p>
+      <label for="yesBtn">Yes</label>
+      <input type="radio" id="yesBtn" name="success" value="yes">
+      <label for="noBtn">No</label>
+      <input type="radio" id="noBtn" name="success" value="no">
+      <div class="rating">
+        <p>Rate your satisfaction (1-5 stars):</p>
+        <div class="stars">
+          <span class="star" data-value="1">★</span>
+          <span class="star" data-value="2">★</span>
+          <span class="star" data-value="3">★</span>
+          <span class="star" data-value="4">★</span>
+          <span class="star" data-value="5">★</span>
+        </div>
+        <input type="hidden" id="satisfactionRating" value="0">
+      </div>
+      <textarea id="noteField" placeholder="Enter your note..."></textarea>
+      <button id="submitBtn">Submit</button>
+      <button id="showChartBtn">Show Progress Chart</button>
+      <button id="showAllNotesBtn">Show All Notes</button>
+    </div>
+    <div class="chart-container">
+      <canvas id="progressChart" width="400" height="200"></canvas>
+    </div>
+    <div id="allNotes" class="notes-container"></div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
